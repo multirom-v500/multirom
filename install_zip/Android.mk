@@ -31,6 +31,10 @@ ifneq ($(MR_DEVICE_VARIANTS),)
 	MR_DEVICES += $(MR_DEVICE_VARIANTS)
 endif
 
+ifneq ($(TARGET_REQUIRES_BUMP), true)
+	TARGET_REQUIRES_BUMP := false
+endif
+
 $(MULTIROM_ZIP_TARGET): multirom trampoline signapk bbootimg mrom_kexec_static mrom_adbd $(multirom_extra_dep)
 	@echo
 	@echo
@@ -45,6 +49,9 @@ $(MULTIROM_ZIP_TARGET): multirom trampoline signapk bbootimg mrom_kexec_static m
 	rm -rf $(MULTIROM_INST_DIR)
 	mkdir -p $(MULTIROM_INST_DIR)
 	cp -a $(install_zip_path)/prebuilt-installer/* $(MULTIROM_INST_DIR)/
+	if $(TARGET_REQUIRES_BUMP); then \
+		cp -a $(install_zip_path)/bump/inject_boot_bump.sh $(MULTIROM_INST_DIR)/scripts/inject_boot.sh; \
+	fi
 	cp -a $(TARGET_ROOT_OUT)/multirom $(MULTIROM_INST_DIR)/multirom/
 	cp -a $(TARGET_ROOT_OUT)/trampoline $(MULTIROM_INST_DIR)/multirom/
 	cp -a $(TARGET_OUT_OPTIONAL_EXECUTABLES)/mrom_kexec_static $(MULTIROM_INST_DIR)/multirom/kexec

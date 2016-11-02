@@ -60,6 +60,11 @@ else
 endif
 endif
 
+ifeq ($(TARGET_REQUIRES_BUMP),true)
+    LOCAL_CFLAGS += -DTARGET_REQUIRES_BUMP
+    LOCAL_SRC_FILES += bump.c
+endif
+
 include $(BUILD_EXECUTABLE)
 
 

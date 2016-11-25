@@ -99,6 +99,10 @@ if [ ! -e "/tmp/newboot.img" ] ; then
     return 1
 fi
 
+# signing new boot.img
+
+cat newboot.img sign > newboot_signed.img
+
 echo "Writing new boot.img..."
-dd bs=4096 if=/tmp/newboot.img of=$BOOT_DEV
+dd bs=4096 if=/tmp/newboot_signed.img of=$BOOT_DEV
 return $?
